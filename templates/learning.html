@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学習画面</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="screen">
+        <header class="header">
+            <button class="menu-btn" aria-label="メニュー" onclick="openMenu()">☰</button>
+            <h1 class="title" id="learning-title">学習セット: 面白い動画の分析</h1>
+            <!-- 右上のボタンは不要なら削除 -->
+            <button class="action-btn" aria-label="アクション"></button>
+        </header>
+        <main>
+            <p style="text-align: center; color: #555; font-size: 14px; margin-bottom: 10px;" id="mode-indicator">クイズモード</p>
+
+            <div class="card" id="learning-card" onclick="revealAnswer()">
+                <p class="main-text" id="card-text">ここに表示される問題文または要約テキストはカードの中心に来るように調整されます。(サンプルテキスト)</p>
+                <p class="answer-text" id="answer-text" style="display: none;">答え: 正解の選択肢</p>
+            </div>
+
+            <p class="tap-to-show" id="tap-to-show" onclick="revealAnswer()">タップして解答を表示</p>
+
+            <!-- クイズの選択肢表示エリア (JSで動的に生成) -->
+            <div id="options-area" style="margin-top: 15px;">
+                <!-- 例:
+                <button class="option-button">A: 選択肢A</button>
+                <button class="option-button">B: 選択肢B</button>
+                ...
+                -->
+            </div>
+
+            <div class="pagination">
+                <button id="prev-button" aria-label="前へ" onclick="goToPrev()"><</button>
+                <span id="page-info">5 / 10</span>
+                <button id="next-button" aria-label="次へ" onclick="goToNext()">></button>
+            </div>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        // learning.html 固有の初期化処理
+        document.addEventListener('DOMContentLoaded', initializeLearningScreen);
+    </script>
+</body>
+</html>

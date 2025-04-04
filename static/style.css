@@ -1,0 +1,350 @@
+/* 基本スタイル */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    background-color: #f0f0f0;
+    display: flex; /* 中央揃えのため */
+    justify-content: center; /* 中央揃えのため */
+    align-items: flex-start; /* 上端揃え */
+    min-height: 100vh;
+    padding: 20px 0; /* 上下に余白 */
+    box-sizing: border-box;
+}
+
+.screen {
+    width: 100%; /* 横幅いっぱい */
+    max-width: 400px; /* スマホ画面幅を想定 */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    min-height: 700px; /* 高さを確保 */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column; /* 子要素を縦に並べる */
+    overflow: hidden; /* はみ出しを隠す */
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #eee;
+    flex-shrink: 0; /* ヘッダーが縮まないように */
+}
+
+.header .menu-btn, .header .action-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.header .action-btn {
+    width: 30px;
+    height: 30px;
+    background-color: #007bff; /* 青い丸 */
+    border-radius: 50%;
+    padding: 0; /* 内側の余白を削除 */
+    /* 必要ならアイコンや文字を配置 */
+}
+
+.header .title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+    text-align: center;
+    flex-grow: 1; /* 中央に配置するために */
+}
+
+main {
+    padding: 15px;
+    flex-grow: 1; /* 残りの高さを埋める */
+    overflow-y: auto; /* 内容が多い場合にスクロール */
+}
+
+/* List Styles */
+ul.list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+li.list-item {
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0; /* paddingはボタン側で調整 */
+}
+li.list-item:last-child {
+    border-bottom: none;
+}
+
+/* ListItemをボタンとして使えるように */
+.list-item-button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: inherit;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+}
+.list-item-button:hover {
+    background-color: #f9f9f9;
+}
+
+.list-item-content {
+    display: flex;
+    align-items: center;
+    flex-grow: 1; /* テキスト部分が幅を取るように */
+    margin-right: 10px; /* 矢印とのスペース */
+}
+
+.list-item-icon {
+    margin-right: 12px;
+    font-size: 22px;
+    color: #007bff; /* アイコンの色 */
+    width: 24px; /* 幅を固定して揃える */
+    text-align: center;
+}
+
+.list-item-text h3 {
+    font-size: 16px;
+    margin: 0 0 4px 0;
+    font-weight: 500;
+    white-space: nowrap; /* 長いタイトルを省略 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.list-item-text p {
+    font-size: 13px;
+    color: #777;
+    margin: 0;
+}
+
+.list-arrow {
+    color: #ccc;
+    font-size: 20px;
+    flex-shrink: 0; /* 矢印が縮まないように */
+}
+
+/* Learning Screen Card */
+.card {
+    background-color: #fff;
+    padding: 30px 20px; /* 少し調整 */
+    border-radius: 12px; /* 少し調整 */
+    border: 1px solid #eee; /* 境界線を追加 */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    text-align: center;
+    margin: 15px 0; /* 少し調整 */
+    min-height: 180px; /* 少し調整 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer; /* タップ可能を示す */
+}
+.card p.main-text {
+    margin: 0;
+    line-height: 1.7; /* 行間調整 */
+    font-size: 16px;
+}
+.card p.answer-text {
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #007bff;
+}
+.tap-to-show {
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+    margin-top: 10px;
+    cursor: pointer; /* タップ可能を示す */
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0 5px 0; /* 下の余白を少し減らす */
+    flex-shrink: 0; /* 縮まないように */
+}
+.pagination button {
+    background: none;
+    border: none;
+    font-size: 30px;
+    color: #007bff;
+    cursor: pointer;
+    padding: 5px 15px; /* タップしやすく */
+}
+.pagination button:disabled {
+    color: #ccc;
+    cursor: default;
+}
+.pagination span {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Settings Screen */
+.settings-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.settings-item span {
+    flex-grow: 1;
+    padding-left: 12px; /* アイコンとのスペース */
+}
+
+/* Toggle Switch (簡易版) */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    cursor: pointer;
+}
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .3s;
+    border-radius: 24px;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+}
+input:checked + .slider {
+    background-color: #007bff;
+}
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.section-title {
+    color: #666; /* 少し濃く */
+    font-size: 14px;
+    font-weight: 500;
+    margin: 20px 0 8px 0;
+    padding-left: 15px;
+}
+
+.logout {
+    color: red;
+    font-weight: bold;
+}
+
+/* Input Screen */
+.input-area {
+    text-align: center;
+    padding-top: 40px; /* ヘッダーがない場合の余白 */
+}
+.input-area h2 {
+    font-size: 20px; /* 少し大きく */
+    font-weight: bold;
+    margin-bottom: 25px;
+    line-height: 1.4;
+}
+.input-area input[type="text"] {
+    width: calc(100% - 44px); /* 左右padding分引く */
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+.input-area .generate-button {
+    background-color: #ff3b30; /* iOS風の赤 */
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    display: inline-flex; /* アイコンとテキストを横並び */
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 25px auto;
+    transition: background-color 0.2s;
+}
+.input-area .generate-button:hover {
+    background-color: #e03024;
+}
+.input-area .generate-button:disabled {
+    background-color: #fca9a4;
+    cursor: not-allowed;
+}
+.input-area .generate-button .icon { /* 再生ボタン風アイコン */
+    margin-left: 8px;
+    font-size: 14px;
+}
+.input-area .loading-spinner {
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+    margin-right: 8px; /* テキストとのスペース */
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+
+.image-placeholder {
+    width: 85%; /* 画面幅に対する割合 */
+    max-width: 300px; /* 最大幅 */
+    aspect-ratio: 16 / 9; /* 縦横比 */
+    background-color: #e9e9e9;
+    border: 1px dashed #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    margin: 0 auto;
+    border-radius: 10px;
+    overflow: hidden; /* 画像表示用 */
+}
+.image-placeholder img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.error-message {
+    color: red;
+    font-size: 13px;
+    margin-top: -15px; /* ボタンとの間を詰める */
+    margin-bottom: 15px;
+    min-height: 1em; /* エラーなくても高さを確保 */
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>履歴</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="screen">
+        <header class="header">
+            <button class="menu-btn" aria-label="メニュー" onclick="openMenu()">☰</button>
+            <h1 class="title">履歴</h1>
+            <!-- 右上のボタンは不要なら削除 -->
+            <button class="action-btn" aria-label="アクション"></button>
+        </header>
+        <main>
+            <ul class="list" id="history-list">
+                <!-- 履歴アイテムはJSで動的に追加される想定 -->
+                <li class="list-item">
+                    <a href="learning.html?id=quiz1" class="list-item-button">
+                        <div class="list-item-content">
+                            <span class="list-item-icon">📊</span> <!-- クイズアイコン例 -->
+                            <div class="list-item-text">
+                                <h3>面白い動画のクイズ</h3>
+                                <p>2023/10/27 10:00</p>
+                            </div>
+                        </div>
+                        <span class="list-arrow">></span>
+                    </a>
+                </li>
+                <li class="list-item">
+                     <a href="learning.html?id=summary1" class="list-item-button">
+                        <div class="list-item-content">
+                             <span class="list-item-icon">📄</span> <!-- 要約アイコン例 -->
+                            <div class="list-item-text">
+                                <h3>学習動画の要約</h3>
+                                <p>2023/10/26 18:30</p>
+                            </div>
+                        </div>
+                        <span class="list-arrow">></span>
+                    </a>
+                </li>
+                <li class="list-item">
+                    <a href="learning.html?id=quiz2" class="list-item-button">
+                        <div class="list-item-content">
+                            <span class="list-item-icon">📊</span>
+                            <div class="list-item-text">
+                                <h3>プレゼン練習用クイズ</h3>
+                                <p>2023/10/25 09:15</p>
+                            </div>
+                        </div>
+                        <span class="list-arrow">></span>
+                    </a>
+                </li>
+                <!-- 他の履歴項目 -->
+            </ul>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

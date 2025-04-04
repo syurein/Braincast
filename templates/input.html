@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>動画からクイズ＆要約生成</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="screen">
+        <!-- この画面にはヘッダーなし -->
+        <main class="input-area">
+            <h2>動画リンクから<br>クイズ＆要約を自動生成！</h2>
+
+            <form id="generate-form" onsubmit="return handleGenerateSubmit();">
+                <input type="text" id="youtube-url" placeholder="ここにYouTubeリンクをペースト" required aria-label="YouTubeリンク">
+                <div class="error-message" id="error-message"></div>
+                <button type="submit" class="generate-button" id="generate-button">
+                    <span class="button-text">生成する</span>
+                    <span class="icon">▶</span>
+                    <div class="loading-spinner" style="display: none;"></div>
+                </button>
+            </form>
+
+            <div class="image-placeholder" id="image-placeholder">
+                <span>(イメージ表示エリア)</span>
+                <!-- <img src="..." alt="動画サムネイル" style="display: none;"> -->
+            </div>
+        </main>
+        <!-- フッターナビゲーションなどを追加する場合はここに -->
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
