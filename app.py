@@ -7,6 +7,12 @@ import requests
 import base64
 from google import genai
 import google.generativeai as genai
+import json
+import time
+import os
+import re
+import random
+
 # --- アプリケーション設定 ---
 app = Flask(__name__)
 # セキュリティのため、実際の運用ではランダムなキーを設定してください
@@ -57,13 +63,14 @@ def download_and_extract_audio(youtube_url):
         logging.error(traceback.format_exc())
         return None
 
+
+
 def transcribe_audio(audio_path):
     """
-    Gemini 2.5 Pro の文字起こしAPIを使用して、音声ファイルの文字起こしを実行します。
-    この実装では google.genai ライブラリを利用してAPI呼び出しを行います。
+    
     """
     # 実際のAPIキーに置き換えてください
-    api_key = ""
+    api_key = os.getenv('GEMINI')
     genai.configure(api_key=api_key)
     # ファイルのアップロード
     audio_file = genai.upload_file(path=audio_path)
@@ -73,18 +80,15 @@ def transcribe_audio(audio_path):
     # プロンプトの準備
     response = model.generate_content(
         [
-            "次の音声を文字起こししてください。",
+            "次の音声を文字起こししたのち、6000文字ほどでわかりやすくまとめ直してください",
             audio_file
         ]
     )
     print(response.text)
+    with open("gemini_output.txt", "w", encoding="utf-8") as f:
+        f.write(response.text)
     return response.text
     # 文字起こし結果を取得    
-import json
-import time
-import os
-import re
-import random
 
 
 try:
@@ -100,7 +104,7 @@ except ImportError:
     APIConnectionError = None # type: ignore
 
 # --- OpenAI クライアントの初期化 (DeepSeek API向け) ---
-api_key = ''
+api_key = os.getenv('DEEPSEEK')
 # DeepSeek APIのエンドポイント (公式ドキュメント等で確認してください)
 # v1を含める場合と含めない場合があるようです。どちらかで試してください。
 base_url = "https://api.deepseek.com/v1"# または "https://api.deepseek.com"
@@ -131,7 +135,30 @@ else:
     # openai ライブラリがインポートできなかった場合
     pass
 
-def call_deepseek_via_openai(prompt, model="deepseek-chat", max_tokens=1500, temperature=0.3, max_retries=2, initial_delay=2):
+'''
+from openai import OpenAI
+
+client = OpenAI(api_key="<DeepSeek API Key>", base_url="https://api.deepseek.com")
+
+response = client.chat.completions.create(
+    model="deepseek-chat",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant"},
+        {"role": "user", "content": "Hello"},
+    ],
+    stream=False
+)
+
+
+'''
+
+
+
+
+
+
+
+def call_deepseek_via_openai(prompt, model="deepseek-chat", max_tokens=15000, temperature=0.3, max_retries=2, initial_delay=2):
     """
     OpenAIライブラリ経由でDeepSeek APIを呼び出す関数。
     成功時はLLMが生成したテキスト(JSON形式を期待)を、失敗時はNoneを返す。
@@ -153,7 +180,7 @@ def call_deepseek_via_openai(prompt, model="deepseek-chat", max_tokens=1500, tem
             # OpenAIライブラリのメソッドで呼び出し
             response = client.chat.completions.create(
                 model=model, # DeepSeekのモデル名を指定
-                messages=[{"role": "user", "content": prompt}],
+                messages=[{"role": "system", "content": "You are a helpful assistant"},{"role": "user", "content": prompt}],
                 max_tokens=max_tokens,
                 temperature=temperature,
                 stream=False,
@@ -267,7 +294,7 @@ def generate_summary(transcript):
     print("バックエンド: 要約生成開始 (DeepSeek API via OpenAI Lib)")
     # プロンプトは前回と同じ
     prompt = f"""
-以下の会議の文字起こしテキストを分析し、内容を理解するための重要なポイントをまとめた要約スライドを3つ生成してください。
+以下の会議の要約を解析し、各スライドに分けてわかりやすくなるようにしてください。なお出力形式は厳密に守ってください
 
 **出力形式の厳格な指示:**
 結果は必ずJSON形式のリストとして出力してください。他のテキスト（例: 説明文、前置きなど）は一切含めないでください。
@@ -349,7 +376,7 @@ def generate_quiz(transcript):
 上記の指示に従い、JSON形式のクイズリストのみを出力してください。説明や前置きは不要です。
 """
     # 呼び出す関数を変更
-    response_str = call_deepseek_via_openai(prompt, temperature=0.3, max_tokens=1500)
+    response_str = call_deepseek_via_openai(prompt, temperature=0.3, max_tokens=8192)
 
     # 以降のJSONパースと検証ロジックは前回と同じ
     if response_str:
@@ -430,24 +457,32 @@ def generate_content():
         return jsonify({"success": False, "message": "URLが指定されていません"}), 400
 
     print(f"API: /api/generate 受信 - URL: {youtube_url}")
-
+  
     # --- バックエンド処理の実行 ---
     try:
-        # 1. 音声抽出 (ダミー)
-        audio_path = download_and_extract_audio(youtube_url)
-        if not audio_path:
-            raise ValueError("音声ファイルの抽出に失敗しました。")
+
+        # 1. 音声抽出
+        #audio_path = download_and_extract_audio(youtube_url)
+        #if not audio_path:
+            #raise ValueError("音声ファイルの抽出に失敗しました。")
 
         # TODO: 抽出した音声ファイルをどこかに保存・管理する必要がある
 
-        # 2. 文字起こし (ダミー)
+        # 2. 文字起こし・要約
+        '''
+        audio_path='./downloads/fCMUnOWYlO4.mp3'
         transcript = transcribe_audio(audio_path)
         if not transcript:
              raise ValueError("文字起こしに失敗しました。")
 
-        # TODO: 文字起こし結果を保存・管理する必要があるかもしれない
+       
+        '''
+        #この上のところは完成してる。下記はテスト用コード
+        with open("gemini_output.txt", "r", encoding="utf-8") as f:
+            transcript = f.read()
 
-        # 3. 要約生成 (ダミー)
+        
+        # 3. 要約生成
         summary_items = generate_summary(transcript)
         if not summary_items:
             raise ValueError("要約の生成に失敗しました。")
@@ -477,7 +512,7 @@ def generate_content():
         print(f"API: /api/generate エラー - {e}")
         return jsonify({"success": False, "message": f"処理中にエラーが発生しました: {str(e)}"}), 500
 
-
+#下記の部分を修正して使えるようにしないとだめ
 @app.route('/api/learning/<content_id>', methods=['GET'])
 def get_learning_content(content_id):
     """指定されたIDの学習コンテンツ（要約とクイズ）を返すAPI"""

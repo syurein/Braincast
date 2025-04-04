@@ -1,6 +1,8 @@
-Flask
+
+
 numpy==1.23.5
 requests
 yt-dlp
 google-generativeai
 google-genai
+openai
