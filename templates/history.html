@@ -5,58 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>履歴</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* サムネイル用のスタイルを追加 (任意) */
+        .list-item-thumbnail {
+            width: 80px; /* 幅を調整 */
+            height: 45px; /* 高さを調整 (16:9) */
+            object-fit: cover; /* 画像のアスペクト比を保ちつつコンテナにフィット */
+            margin-right: 10px; /* テキストとの間隔 */
+            border-radius: 4px; /* 角丸 */
+            flex-shrink: 0; /* コンテナが縮んでも画像サイズを維持 */
+        }
+        .list-item-content {
+            display: flex; /* サムネイルとテキストを横並び */
+            align-items: center; /* 垂直方向中央揃え */
+            flex-grow: 1; /* 利用可能なスペースを埋める */
+            overflow: hidden; /* はみ出したタイトルを隠す */
+        }
+        .list-item-text h3 {
+            white-space: nowrap; /* タイトルを1行に */
+            overflow: hidden; /* はみ出しを隠す */
+            text-overflow: ellipsis; /* はみ出しを...で表示 */
+            margin-bottom: 4px; /* 日付との間隔 */
+        }
+        .list-item-text p {
+             font-size: 0.8em; /* 日付のフォントサイズ */
+             color: #666;    /* 日付の色 */
+             margin: 0;
+        }
+        .list-item-empty, .list-item-error {
+            text-align: center;
+            color: #888;
+            padding: 20px;
+        }
+        .list-item-error {
+            color: red;
+        }
+    </style>
 </head>
 <body>
     <div class="screen">
         <header class="header">
             <button class="menu-btn" aria-label="メニュー" onclick="openMenu()">☰</button>
             <h1 class="title">履歴</h1>
-            <!-- 右上のボタンは不要なら削除 -->
-            <button class="action-btn" aria-label="アクション"></button>
+            <button class="action-btn" aria-label="アクション"></button> <!-- 右上のボタンは不要なら削除 -->
         </header>
         <main>
             <ul class="list" id="history-list">
-                <!-- 履歴アイテムはJSで動的に追加される想定 -->
-                <li class="list-item">
-                    <a href="learning.html?id=quiz1" class="list-item-button">
-                        <div class="list-item-content">
-                            <span class="list-item-icon">📊</span> <!-- クイズアイコン例 -->
-                            <div class="list-item-text">
-                                <h3>面白い動画のクイズ</h3>
-                                <p>2023/10/27 10:00</p>
+                {# エラーメッセージがあれば表示 #}
+                {% if error_message %}
+                    <li class="list-item-error">履歴の取得に失敗しました: {{ error_message }}</li>
+                {% endif %}
+
+                {# 履歴アイテムがあればループ処理 #}
+                {% if history_items %}
+                    {% for item in history_items %}
+                    <li class="list-item">
+                        {# 各アイテムに学習ページへのリンクを設定 #}
+                        <a href="{{ url_for('learning_page', id=item.id) }}" class="list-item-button">
+                            <div class="list-item-content">
+                                {# サムネイルがあれば表示、なければデフォルトアイコン #}
+                                {% if item.thumbnail %}
+                                    <img src="{{ item.thumbnail }}" alt="Thumbnail" class="list-item-thumbnail" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';"> {# 画像読み込み失敗時の代替アイコン表示用 #}
+                                    <span class="list-item-icon" style="display: none;">📄</span> {# 代替アイコン (最初は非表示) #}
+                                {% else %}
+                                    {# typeがないのでデフォルトアイコン #}
+                                    <span class="list-item-icon">📄</span>
+                                {% endif %}
+                                <div class="list-item-text">
+                                    {# タイトルと日付を表示 #}
+                                    <h3>{{ item.title }}</h3>
+                                    <p>{{ item.date }}</p>
+                                </div>
                             </div>
-                        </div>
-                        <span class="list-arrow">></span>
-                    </a>
-                </li>
-                <li class="list-item">
-                     <a href="learning.html?id=summary1" class="list-item-button">
-                        <div class="list-item-content">
-                             <span class="list-item-icon">📄</span> <!-- 要約アイコン例 -->
-                            <div class="list-item-text">
-                                <h3>学習動画の要約</h3>
-                                <p>2023/10/26 18:30</p>
-                            </div>
-                        </div>
-                        <span class="list-arrow">></span>
-                    </a>
-                </li>
-                <li class="list-item">
-                    <a href="learning.html?id=quiz2" class="list-item-button">
-                        <div class="list-item-content">
-                            <span class="list-item-icon">📊</span>
-                            <div class="list-item-text">
-                                <h3>プレゼン練習用クイズ</h3>
-                                <p>2023/10/25 09:15</p>
-                            </div>
-                        </div>
-                        <span class="list-arrow">></span>
-                    </a>
-                </li>
-                <!-- 他の履歴項目 -->
+                            <span class="list-arrow">></span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                {# 履歴アイテムがなく、エラーもない場合は「履歴なし」メッセージ #}
+                {% elif not error_message %}
+                    <li class="list-item-empty">履歴はありません。</li>
+                {% endif %}
             </ul>
         </main>
+        <!-- フッターナビゲーション -->
+        <footer class="footer-nav">
+            <button onclick="goToInput()" aria-label="入力">
+                 <span class="nav-icon">➕</span>
+                 <span class="nav-text">入力</span>
+            </button>
+            <button onclick="goToHistory()" aria-label="履歴" class="active"> {# 現在のページをアクティブに #}
+                 <span class="nav-icon">🕒</span>
+                 <span class="nav-text">履歴</span>
+            </button>
+            <button onclick="goToSettings()" aria-label="設定">
+                 <span class="nav-icon">⚙️</span>
+                 <span class="nav-text">設定</span>
+            </button>
+        </footer>
     </div>
+    {# script.js はナビゲーション用などに必要なら残す #}
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

@@ -6,3 +6,4 @@ yt-dlp
 google-generativeai
 google-genai
 openai
+youtube-transcript-api

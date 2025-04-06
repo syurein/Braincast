@@ -1,0 +1,32 @@
+[
+  {
+    "id": "s1",
+    "type": "summary",
+    "text": "ミニPCメーカーMINISFORUMのUM700を購入\n他メーカーと比較して国内での取り扱いがあり安心感がある"
+  },
+  {
+    "id": "s2",
+    "type": "summary",
+    "text": "UM700のスペック\nCPU：Intel N100\nメモリ：8GB/DDR5 4800MHz\nSSD：256GB"
+  },
+  {
+    "id": "s3",
+    "type": "summary",
+    "text": "外観：手のひらサイズ、シルバーで質感も良い\nインターフェース：USB Type-A x4, Type-C x1, HDMI x2, DisplayPort x1, イヤホンジャック, MicroSDスロット, 2.5インチSSD増設用SATAケーブル"
+  },
+  {
+    "id": "s4",
+    "type": "summary",
+    "text": "ベンチマーク結果\nFF14：普通評価\nFF15：動作困難\nCinebench R23：マルチ2468, シングル900\nCPU-Z：マルチ1281, シングル383\nPassMark：CPU 5679, 3D Graphics 831, Memory 2173, Disk 4505"
+  },
+  {
+    "id": "s5",
+    "type": "summary",
+    "text": "他社N100搭載機と比較\n消費電力は半分で温度も低い\n性能は1割程度低い\n総合的に見て価格・性能・消費電力のバランスが良い"
+  },
+  {
+    "id": "s6",
+    "type": "summary",
+    "text": "用途\nオフィスソフト：快適に動作\n動画編集：やや厳しい\n動画鑑賞：問題なし\nサブPCや子供用PCにおすすめ"
+  }
+]

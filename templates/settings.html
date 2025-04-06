@@ -6,6 +6,21 @@
     <title>設定</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+<!-- 例: フッターナビゲーション (各HTMLの </body> の直前に追加) -->
+<footer class="footer-nav">
+    <button onclick="goToInput()" aria-label="入力">
+         <span class="nav-icon">➕</span> <!-- アイコンは好みで変更 -->
+         <span class="nav-text">入力</span>
+    </button>
+    <button onclick="goToHistory()" aria-label="履歴">
+         <span class="nav-icon">🕒</span>
+         <span class="nav-text">履歴</span>
+    </button>
+    <button onclick="goToSettings()" aria-label="設定">
+         <span class="nav-icon">⚙️</span>
+         <span class="nav-text">設定</span>
+    </button>
+</footer>
 <body>
     <div class="screen">
         <header class="header">
